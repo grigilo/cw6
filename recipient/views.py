@@ -1,0 +1,34 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
+    DeleteView
+
+from recipient.forms import RecipientForm
+from recipient.models import Recipient
+
+
+class RecipientListView(LoginRequiredMixin, ListView):
+    model = Recipient
+
+
+class RecipientDetailView(LoginRequiredMixin, DetailView):
+    model = Recipient
+
+
+class RecipientCreateView(LoginRequiredMixin, CreateView):
+    model = Recipient
+    form_class = RecipientForm
+    success_url = reverse_lazy('recipient:list')
+
+
+class RecipientUpdateView(LoginRequiredMixin, UpdateView):
+    model = Recipient
+    form_class = RecipientForm
+
+    def get_success_url(self):
+        return reverse_lazy('recipient:view', kwargs={'pk': self.get_object().id})
+
+
+class RecipientDeleteView(LoginRequiredMixin, DeleteView):
+    model = Recipient
+    success_url = reverse_lazy('recipient:list')
