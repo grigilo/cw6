@@ -1,15 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, UpdateView, DetailView
+from django.views.generic import (CreateView, DeleteView, UpdateView,
+                                  DetailView, ListView)
 
 from blog.forms import BlogForm
 from blog.models import Blog
 
 
-# class BlogListView(LoginRequiredMixin, ListView):
-#     model = Blog
-#
-#
+class BlogListView(LoginRequiredMixin, ListView):
+    model = Blog
+
+
 class BlogDetailView(LoginRequiredMixin, DetailView):
     model = Blog
 

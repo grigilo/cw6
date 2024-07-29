@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
     DeleteView
 
@@ -20,13 +20,20 @@ class RecipientCreateView(LoginRequiredMixin, CreateView):
     form_class = RecipientForm
     success_url = reverse_lazy('recipient:list')
 
+    def form_valid(self, form):
+        recipient = form.save()
+        recipient.owner = self.request.user
+        recipient.save()
+        return super().form_valid(form)
+
 
 class RecipientUpdateView(LoginRequiredMixin, UpdateView):
     model = Recipient
     form_class = RecipientForm
 
     def get_success_url(self):
-        return reverse_lazy('recipient:view', kwargs={'pk': self.get_object().id})
+        return reverse_lazy('recipient:view',
+                            kwargs={'pk': self.get_object().id})
 
 
 class RecipientDeleteView(LoginRequiredMixin, DeleteView):

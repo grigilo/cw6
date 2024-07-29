@@ -16,6 +16,7 @@ class MailingMessage(models.Model):
     content = models.TextField(verbose_name='Контент')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, **NULLABLE,
                               verbose_name='Владелец')
+
     class Meta:
         verbose_name = 'Сообщение'
         verbose_name_plural = 'Сообщения'

@@ -14,13 +14,12 @@
                     <p>{{ item }}</p>
                     {% endfor %}
 
-                    {% if user == recipient.owner or user.is_superuser or
-                    perms.MailingSettings.change_mailingsettings_setting_status %}
+                    {% if user == object.owner or user.is_superuser or perms.mailing.change_mailingsettings_setting_status %}
                     <a class="btn btn-primary" href="{% url 'mailing:settings_edit' object.pk %}"
                        role="button"> Изменить</a>
                     {% endif %}
                     <a class="btn btn-primary" href="{% url 'mailing:settings_list' %}" role="button">Назад</a>
-                    {% if user == recipient.owner or user.is_superuser %}
+                    {% if user == object.owner or user.is_superuser %}
                     <a class="btn btn-primary" href="{% url 'mailing:settings_delete' object.pk %}" role="button">Удалить</a>
                     {% endif %}
                 </div>

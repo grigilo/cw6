@@ -1,11 +1,10 @@
-
 {% extends 'recipient/base.html' %}
 {% load my_tags %}
 {% block content %}
 <div class="container px-3 py-3 pt-md-5 pb-md-4">
     <div class="col-12 mb-5 pt-md-5">
         {% if user.is_superuser or perms.blog.add_blog %}
-        <a class="btn btn-outline-primary" href="{% url 'blog:create' %}">Добавить отзыв</a>
+        <a class="btn btn-outline-primary" href="{% url 'blog:create' %}">Добавить пост</a>
         {% endif %}
     </div>
     <div class="row text-center">

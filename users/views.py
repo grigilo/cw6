@@ -1,4 +1,3 @@
-
 import string
 import random
 
@@ -45,7 +44,8 @@ def email_verification(request, token):
 
 def reset_password(request):
     context = {
-        "success_message": "Пароль успешно сброшен. Новый пароль был отправлен на ваш адрес электронной почты.",
+        "success_message": "Пароль успешно сброшен."
+                           "Новый пароль был отправлен на ваш адрес электронной почты.",
     }
     if request.method == "POST":
         email = request.POST.get("email")
@@ -58,7 +58,8 @@ def reset_password(request):
         user.save()
         send_mail(
             subject="Восстановление пароля",
-            message=f"Здравствуйте, вы запрашивали обновление пароля. Ваш новый пароль: {password}",
+            message=f"Здравствуйте, вы запрашивали обновление пароля. "
+                    f"Ваш новый пароль: {password}",
             from_email=EMAIL_HOST_USER,
             recipient_list=[user.email],
         )

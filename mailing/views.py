@@ -4,26 +4,28 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, \
     DetailView, TemplateView
 
-from mailing.forms import MailingSettingsForm, MailingMessageForm
+from mailing.forms import MailingSettingsForm, MailingMessageForm, \
+    MailingModeratorForm
 from mailing.models import MailingMessage, MailingSettings
+from mailing.services import get_blog_from_cache
 
 from recipient.models import Recipient
 
 
-# class MailingMessageTemplateView(LoginRequiredMixin, TemplateView):
-#     template_name = 'mailing/home.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context_data = super().get_context_data(**kwargs)
-#         context_data['blogs'] = get_blog_from_cache()
-#         mailing_settings = MailingSettings.objects.all()
-#         context_data['mailing_settings'] = len(mailing_settings)
-#         active_mailings = MailingSettings.objects.filter(
-#             setting_status='Started')
-#         context_data['active_mailings'] = len(active_mailings)
-#         recipients = Recipient.objects.all()
-#         context_data['recipient'] = len(recipients)
-#         return context_data
+class MailingMessageTemplateView(LoginRequiredMixin, TemplateView):
+    template_name = 'mailing/home.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['blogs'] = get_blog_from_cache()
+        mailing_settings = MailingSettings.objects.all()
+        context_data['mailing_settings'] = len(mailing_settings)
+        active_mailings = MailingSettings.objects.filter(
+            setting_status='Started')
+        context_data['active_mailings'] = len(active_mailings)
+        recipients = Recipient.objects.all()
+        context_data['recipient'] = len(recipients)
+        return context_data
 
 
 class MailingMessageCreateView(LoginRequiredMixin, CreateView):
@@ -31,11 +33,11 @@ class MailingMessageCreateView(LoginRequiredMixin, CreateView):
     form_class = MailingMessageForm
     success_url = reverse_lazy('mailing:list')
 
-    # def form_valid(self, form):
-    #     message = form.save()
-    #     message.owner = self.request.user
-    #     message.save()
-    #     return super().form_valid(form)
+    def form_valid(self, form):
+        message = form.save()
+        message.owner = self.request.user
+        message.save()
+        return super().form_valid(form)
 
 
 class MailingMessageUpdateView(LoginRequiredMixin, UpdateView):
@@ -62,11 +64,11 @@ class MailingSettingsCreateView(LoginRequiredMixin, CreateView):
     form_class = MailingSettingsForm
     success_url = reverse_lazy('mailing:settings_list')
 
-    # def form_valid(self, form):
-    #     settings = form.save()
-    #     settings.owner = self.request.user
-    #     settings.save()
-    #     return super().form_valid(form)
+    def form_valid(self, form):
+        settings = form.save()
+        settings.owner = self.request.user
+        settings.save()
+        return super().form_valid(form)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -79,18 +81,18 @@ class MailingSettingsUpdateView(LoginRequiredMixin, UpdateView):
     form_class = MailingSettingsForm
     success_url = reverse_lazy('mailing:settings_list')
 
-    # def get_form_class(self):
-    #     user = self.request.user
-    #     if user == self.object.owner or user.is_superuser:
-    #         return MailingSettingsForm
-    #     if user.has_perm('mailing.change_mailingsettings_setting_status'):
-    #         return MailingModeratorForm
-    #     return PermissionDenied
-    #
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs.update({'request': self.request})
-    #     return kwargs
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner or user.is_superuser:
+            return MailingSettingsForm
+        if user.has_perm('mailing.change_mailingsettings_setting_status'):
+            return MailingModeratorForm
+        return PermissionDenied
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
 
 
 class MailingSettingsListView(LoginRequiredMixin, ListView):
