@@ -13,21 +13,20 @@ from mailing.cron import send_mailing
 
 logger = logging.getLogger(__name__)
 
-
 send_mailing()
 
 
-# The `close_old_connections` decorator ensures that database connections, that have become
-# unusable or are obsolete, are closed before and after your job has run. You should use it
-# to wrap any jobs that you schedule that access the Django database in any way.
 @util.close_old_connections
 def delete_old_job_executions(max_age=604_800):
     """
-    This job deletes APScheduler job execution entries older than `max_age` from the database.
-    It helps to prevent the database from filling up with old historical records that are no
+    This job deletes APScheduler job execution entries older than `max_age`
+    from the database.
+    It helps to prevent the database from filling up with old historical
+    records that are no
     longer useful.
 
-    :param max_age: The maximum length of time to retain historical job execution records.
+    :param max_age: The maximum length of time to retain historical job
+    execution records.
                     Defaults to 7 days.
     """
     DjangoJobExecution.objects.delete_old_job_executions(max_age)

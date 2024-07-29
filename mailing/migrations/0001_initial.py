@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -16,8 +15,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='MailingMessage',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100, verbose_name='Заголовок')),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True,
+                                           serialize=False, verbose_name='ID')),
+                ('title',
+                 models.CharField(max_length=100, verbose_name='Заголовок')),
                 ('content', models.TextField(verbose_name='Контент')),
             ],
             options={
@@ -28,29 +29,54 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='MailingSettings',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_datetime', models.DateTimeField(auto_now_add=True, verbose_name='Начало рассылки')),
-                ('end_time', models.DateTimeField(blank=True, null=True, verbose_name='Конец рассылки')),
-                ('sending', models.CharField(choices=[('daily', 'раз в день'), ('weekly', 'раз в неделю'), ('monthly', 'раз в месяц')], max_length=50, verbose_name='Период рассылки')),
-                ('setting_status', models.CharField(choices=[('Create', 'Создана'), ('Started', 'Отправлено'), ('Done', 'Завершена')], default='Create', max_length=50, verbose_name='Статус рассылки')),
-                ('message', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mailing.mailingmessage', verbose_name='Сообщения')),
-                ('recipients', models.ManyToManyField(to='recipient.recipient', verbose_name='Получатели')),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True,
+                                           serialize=False, verbose_name='ID')),
+                ('first_datetime', models.DateTimeField(auto_now_add=True,
+                                                        verbose_name='Начало рассылки')),
+                ('end_time', models.DateTimeField(blank=True, null=True,
+                                                  verbose_name='Конец рассылки')),
+                ('sending', models.CharField(choices=[('daily', 'раз в день'), (
+                'weekly', 'раз в неделю'), ('monthly', 'раз в месяц')],
+                                             max_length=50,
+                                             verbose_name='Период рассылки')),
+                ('setting_status', models.CharField(
+                    choices=[('Create', 'Создана'), ('Started', 'Отправлено'),
+                             ('Done', 'Завершена')], default='Create',
+                    max_length=50, verbose_name='Статус рассылки')),
+                ('message',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   to='mailing.mailingmessage',
+                                   verbose_name='Сообщения')),
+                ('recipients', models.ManyToManyField(to='recipient.recipient',
+                                                      verbose_name='Получатели')),
             ],
             options={
                 'verbose_name': 'Настройка рассылки',
                 'verbose_name_plural': 'Настройки рассылки',
-                'permissions': [('change_mailingsettings_setting_status', 'Can change mailingsettings setting_status')],
+                'permissions': [('change_mailingsettings_setting_status',
+                                 'Can change mailingsettings setting_status')],
             },
         ),
         migrations.CreateModel(
             name='MailingStatus',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('last_datetime', models.DateTimeField(auto_now_add=True, verbose_name='last_datetime')),
-                ('status', models.CharField(choices=[('success', 'успешно'), ('fail', 'неуспешно')], default='', max_length=50, verbose_name='статус попытки')),
-                ('mailing_response', models.TextField(verbose_name='mailing_response')),
-                ('mailing_list', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mailing.mailingsettings', verbose_name='рассылка')),
-                ('recipient', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='recipient.recipient', verbose_name='клиент рассылки')),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True,
+                                           serialize=False, verbose_name='ID')),
+                ('last_datetime', models.DateTimeField(auto_now_add=True,
+                                                       verbose_name='last_datetime')),
+                ('status', models.CharField(
+                    choices=[('success', 'успешно'), ('fail', 'неуспешно')],
+                    default='', max_length=50, verbose_name='статус попытки')),
+                ('mailing_response',
+                 models.TextField(verbose_name='mailing_response')),
+                ('mailing_list',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   to='mailing.mailingsettings',
+                                   verbose_name='рассылка')),
+                ('recipient', models.ForeignKey(blank=True, null=True,
+                                                on_delete=django.db.models.deletion.CASCADE,
+                                                to='recipient.recipient',
+                                                verbose_name='клиент рассылки')),
             ],
             options={
                 'verbose_name': 'Статус отправки',

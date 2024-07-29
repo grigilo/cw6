@@ -1,91 +1,87 @@
-<div class="nav-scroller py-1 mb-3 border-bottom">
-    <nav class="nav nav-underline justify-content-between">
+<!--<div class="nav-scroller py-1 mb-3 border-bottom">-->
+<!--    <nav class="nav nav-underline justify-content-between">-->
 
-        <a class="nav-item nav-link link-body-emphasis" href="#">General</a>
-        {% if user.is_authenticated %}
-        <a class="nav-item nav-link link-body-emphasis" href="{% url 'recipient:list' %}">All Recipients</a>
-        <a class="nav-item nav-link link-body-emphasis" href="{% url 'recipient:create' %}">Add Recipient</a>
+<!--        <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:home' %}">General</a>-->
+<!--        {% if user.is_authenticated %}-->
+<!--        <a class="nav-item nav-link link-body-emphasis" href="{% url 'recipient:list' %}">All Recipients</a>-->
+<!--        <a class="nav-item nav-link link-body-emphasis" href="{% url 'recipient:create' %}">Add Recipient</a>-->
 
-        {% if perms.blog.add_blog %}
-        <a class="nav-item nav-link link-body-emphasis" href="{% url 'blog:create' %}">Add Blog</a>
-        {% endif %}
-        <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:list' %}">All Mailings</a>
-        <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:settings_list' %}">Planing mailing</a>
-        <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:create' %}">Create message</a>
-        {% endif %}
-        {% if user.is_superuser %}
-        <a class="nav-item nav-link link-body-emphasis" href="{% url 'admin:index' %}">Admin panel</a>
-        {% endif %}
-        {% if user.is_authenticated %}
-        <a class="btn btn-outline-primary" href="{% url 'users:profile' %}">Профиль</a>
-        <div class="container">
+<!--        {% if perms.blog.add_blog %}-->
+<!--        <a class="nav-item nav-link link-body-emphasis" href="{% url 'blog:create' %}">Add Post</a>-->
+<!--        {% endif %}-->
+<!--        <a class="nav-item nav-link link-body-emphasis" href="{% url 'blog:list' %}">Blog</a>-->
+<!--        <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:list' %}">All Messages</a>-->
+<!--        <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:create' %}">Create message</a>-->
+<!--        <a class="nav-item nav-link link-body-emphasis" href="{% url 'mailing:settings_list' %}">Planing mailing</a>-->
+
+<!--        {% endif %}-->
+<!--        {% if user.is_superuser %}-->
+<!--        <a class="nav-item nav-link link-body-emphasis" href="{% url 'admin:index' %}">Admin panel</a>-->
+<!--        {% endif %}-->
+<!--        {% if user.is_authenticated %}-->
+<!--        <a class="btn btn-outline-primary" href="{% url 'users:profile' %}">Профиль</a>-->
+<!--        <div class="container">-->
+<!--            <form action="{% url 'users:logout' %}" method="post">-->
+<!--                {% csrf_token %}-->
+<!--                <button type="submit" class="btn btn-outline-primary">Выйти</button>-->
+
+<!--            </form>-->
+
+<!--        </div>-->
+
+<!--        {% else %}-->
+<!--        <a type="button" class="btn btn-outline-primary me-2" href="{% url 'users:login' %}">Войти</a>-->
+<!--        <a type="button" class="btn btn-primary" href="{% url 'users:register' %}">Зарегистрироваться</a>-->
+<!--        {% endif %}-->
+<!--    </nav>-->
+<!--</div>-->
+<header class="p-3 mb-3 border-bottom">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="{% url 'mailing:home' %}" class="nav-link px-2 link-body-emphasis">Главная</a></li>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'recipient:list' %}" class="nav-link px-2 link-body-emphasis">Все получатели</a></li>
+          <li><a href="{% url 'recipient:create' %}" class="nav-link px-2 link-body-emphasis">Добавить получателя</a></li>
+          {% if perms.blog.add_blog %}
+          <li><a href="{% url 'blog:create' %}" class="nav-link px-2 link-body-emphasis">Добавить пост</a></li>
+          {% endif %}
+          <li><a href="{% url 'blog:list' %}" class="nav-link px-2 link-body-emphasis">Блог</a></li>
+          <li><a href="{% url 'mailing:list' %}" class="nav-link px-2 link-body-emphasis">Все сообщения</a></li>
+          <li><a href="{% url 'mailing:create' %}" class="nav-link px-2 link-body-emphasis">Создать сообщение</a></li>
+          <li><a href="{% url 'mailing:settings_list' %}" class="nav-link px-2 link-body-emphasis">Запланировать рассылку</a></li>
+          {% endif %}
+        </ul>
+
+
+        <div class="dropdown text-end">
+          {% if user.is_authenticated %}
+          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="media/{{user.avatar}}" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          {% endif %}
+          <ul class="dropdown-menu text-small">
+            {% if user.is_superuser %}
+            <li><a class="dropdown-item" href="{% url 'admin:index' %}">Панель администратора</a></li>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <li><a class="dropdown-item" href="{% url 'users:profile' %}">Мой профиль</a></li>
+            {% endif %}
+            {% if user.is_anonymous %}
+            <li><a class="dropdown-item" href="{% url 'users:login' %}">Войти</a></li>
+            <li><a class="dropdown-item" href="{% url 'users:register' %}">Зарегистрироваться</a></li>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <li><hr class="dropdown-divider"></li>
             <form action="{% url 'users:logout' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-primary">Выйти</button>
-
+            {% csrf_token %}
+              <button type="submit" class="btn btn-link-black">Выйти</button>
             </form>
-
+            {% endif %}
+          </ul>
         </div>
-
-        {% else %}
-        <a type="button" class="btn btn-outline-primary me-2" href="{% url 'users:login' %}">Войти</a>
-        <a type="button" class="btn btn-primary" href="{% url 'users:register' %}">Зарегистрироваться</a>
-        {% endif %}
-    </nav>
-</div>
-<!--<header>-->
-<!--    <div class="px-3 py-2 text-bg-dark border-bottom">-->
-<!--      <div class="container">-->
-<!--        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">-->
-<!--          <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">-->
-<!--            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>-->
-<!--          </a>-->
-
-<!--          <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">-->
-<!--            <li>-->
-<!--              <a href="#" class="nav-link text-secondary">-->
-<!--                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"/></svg>-->
-<!--                Home-->
-<!--              </a>-->
-<!--            </li>-->
-<!--            <li>-->
-<!--              <a href="#" class="nav-link text-white">-->
-<!--                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>-->
-<!--                Dashboard-->
-<!--              </a>-->
-<!--            </li>-->
-<!--            <li>-->
-<!--              <a href="#" class="nav-link text-white">-->
-<!--                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>-->
-<!--                Orders-->
-<!--              </a>-->
-<!--            </li>-->
-<!--            <li>-->
-<!--              <a href="#" class="nav-link text-white">-->
-<!--                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#grid"/></svg>-->
-<!--                Products-->
-<!--              </a>-->
-<!--            </li>-->
-<!--            <li>-->
-<!--              <a href="#" class="nav-link text-white">-->
-<!--                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#people-circle"/></svg>-->
-<!--                Customers-->
-<!--              </a>-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="px-3 py-2 border-bottom mb-3">-->
-<!--      <div class="container d-flex flex-wrap justify-content-center">-->
-<!--        <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">-->
-<!--          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">-->
-<!--        </form>-->
-
-<!--        <div class="text-end">-->
-<!--          <button type="button" class="btn btn-light text-dark me-2">Login</button>-->
-<!--          <button type="button" class="btn btn-primary">Sign-up</button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </header>-->
+      </div>
+    </div>
+  </header>
